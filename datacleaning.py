@@ -1,4 +1,5 @@
 import csv
+from lib2to3.pgen2.pgen import DFAState
 import nltk
 import string
 import pandas as pd
@@ -10,8 +11,10 @@ from textblob import TextBlob
 def main():
     df = initdf("Data/test.csv")
     dict = first_convert(df)
-    
-
+    pdict = bayes(df, dict)
+    print(pdict['cry'])
+    #print(pdict['suspicious'])
+    """
     state = True
     while state != False:
         sentence = input("Enter a sentence: ")
@@ -20,7 +23,38 @@ def main():
             break
         testimonial = TextBlob(sentence)
         print(testimonial.sentiment)
+    """
+
+def bayes(df, dict):
+    size = len(df)
+    words = df.Text.str.len().sum()
+    emo_words = [0,0,0,0,0,0]
+    emo_words[0] = (df[df['Emotion']==0]).Text.str.len().sum()
+    emo_words[1] = (df[df['Emotion']==1]).Text.str.len().sum()
+    emo_words[2] = (df[df['Emotion']==2]).Text.str.len().sum()
+    emo_words[3] = (df[df['Emotion']==3]).Text.str.len().sum()
+    emo_words[4] = (df[df['Emotion']==4]).Text.str.len().sum()
+    emo_words[5] = (df[df['Emotion']==5]).Text.str.len().sum()
     
+    emo_p = [0,0,0,0,0,0]
+    emo_p[0] = emo_words[0]/words
+    emo_p[1] = emo_words[1]/words
+    emo_p[2] = emo_words[2]/words
+    emo_p[3] = emo_words[3]/words
+    emo_p[4] = emo_words[4]/words
+    emo_p[5] = emo_words[5]/words
+    
+    pdict = defaultdict(list)
+    for word in dict.keys():
+        n_word = len(dict[word])
+        word_p = n_word/words
+        for i in range(6):
+            emo_word=dict[word].count(i)
+            pdict[word].append(emo_word/emo_words[0]*emo_p[0]/word_p)
+
+    return pdict
+
+
 def initdf(csv_file):
     f=open(csv_file)
     rows=list(csv.reader(f))
@@ -46,7 +80,6 @@ def tokenize(text):
 def first_convert(df):
     dict1 = defaultdict(list)
     emotion = list(df.loc[:,"Emotion"])
-    print(emotion)
     for row in range(1,len(df.index)):
         temp = df.iloc[row,0]
         for word in temp:
