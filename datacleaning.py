@@ -32,14 +32,12 @@ def todataframe(rawdf):
     df = pd.DataFrame(rawdf, columns =["Text","Emotion"])
     return df
 
-def firt_convert(df):
+def first_convert(df):
     dict1 = defaultdict(list)
-    emolist =[]
     emotion = list(df.loc[:,"Emotion"])
     print(emotion)
     for row in range(1,len(df.index)):
         temp = df.iloc[row,0]
-        print(temp)
         for word in temp:
             dict1[word].append(emotion[row])
     print(dict1)
