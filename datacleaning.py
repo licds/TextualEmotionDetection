@@ -17,14 +17,15 @@ def main():
         row[0]=tokenize(row[0])
     
     df = todataframe(rows)
-    firt_convert(df)
+    test = first_convert(df)
+    print(test)
 
 def tokenize(text):
     tokens = nltk.word_tokenize(text)
     for word in tokens:
         word=word.lower()
         word=WordNetLemmatizer().lemmatize(word)
-        if (word in string.punctuation) and (word in nltk.corpus.stopwords.words("english")) :
+        if (word in string.punctuation) or (word in nltk.corpus.stopwords.words("english")) :
             tokens.remove(word)
     return tokens
 
@@ -40,7 +41,7 @@ def first_convert(df):
         temp = df.iloc[row,0]
         for word in temp:
             dict1[word].append(emotion[row])
-    print(dict1)
+    return dict1
 
                
    
