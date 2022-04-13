@@ -1,6 +1,7 @@
 import csv
 import nltk
 import string
+import pandas as pd
 
 def main():
     f = open("test.csv")
@@ -16,7 +17,7 @@ def main():
     for row in rows:
         l=tokenize(row[0])
         row[0]=l
-    print(rows)
+    todataframe(row)
     
 
 def tokenize(document):
@@ -28,5 +29,9 @@ def tokenize(document):
             l.append(word)
     return l
 
+
+def todataframe(before_df):
+    first_df = pd.df(before_df,columns =["Text","Emotion"])
+    print(first_df)
 if __name__ == "__main__":
     main()
