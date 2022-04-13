@@ -7,17 +7,10 @@ from nltk.stem.wordnet import WordNetLemmatizer
 def main():
     f = open("Data/test.csv")
 
-    csvreader=csv.reader(f)
-    rows=[]
-    n=0
-    for row in csvreader:
-        n+=1
-        if n==1:
-            continue
-        rows.append(row)
+    rows=list(csv.reader(f))
+    
     for row in rows:
-        l=tokenize(row[0])
-        row[0]=l
+        row[0]=tokenize(row[0])
     
     df = todataframe(rows)
     
