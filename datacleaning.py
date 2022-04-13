@@ -4,7 +4,7 @@ import string
 import pandas as pd
 
 def main():
-    f = open("test.csv")
+    f = open("Data/test.csv")
 
     csvreader=csv.reader(f)
     rows=[]
@@ -17,7 +17,8 @@ def main():
     for row in rows:
         l=tokenize(row[0])
         row[0]=l
-    todataframe(row)
+    print(rows)
+    #todataframe(row)
     
 
 def tokenize(document):
@@ -30,8 +31,9 @@ def tokenize(document):
     return l
 
 
+
 def todataframe(before_df):
-    first_df = pd.df(before_df,columns =["Text","Emotion"])
+    first_df = pd.DataFrame(before_df,columns =["Text","Emotion"])
     print(first_df)
 if __name__ == "__main__":
     main()
