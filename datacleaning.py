@@ -5,7 +5,6 @@ import pandas as pd
 from nltk.stem.wordnet import WordNetLemmatizer
 from collections import defaultdict
 #from textblob import Textblob
-
 #from textblob.np_extractors import ConllExtractor
 
 def main():
