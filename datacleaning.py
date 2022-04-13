@@ -2,6 +2,7 @@ import csv
 import nltk
 import string
 import pandas as pd
+from nltk.stem.wordnet import WordNetLemmatizer
 
 def main():
     f = open("Data/test.csv")
@@ -26,6 +27,7 @@ def tokenize(document):
     tokens = nltk.word_tokenize(document)
     for word in tokens:
         word=word.lower()
+        word=WordNetLemmatizer().lemmatize(word)
         if (word not in string.punctuation) and (word not in nltk.corpus.stopwords.words("english")) :
             l.append(word)
     return l
