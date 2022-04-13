@@ -18,10 +18,9 @@ def main():
     for row in rows:
         l=tokenize(row[0])
         row[0]=l
-    print(rows)
-    #todataframe(row)
     
-
+    df = todataframe(rows)
+    
 def tokenize(document):
     l=[]
     tokens = nltk.word_tokenize(document)
@@ -32,10 +31,8 @@ def tokenize(document):
             l.append(word)
     return l
 
-
-
-def todataframe(before_df):
-    first_df = pd.DataFrame(before_df,columns =["Text","Emotion"])
-    print(first_df)
+def todataframe(rawdf):
+    df = pd.DataFrame(rawdf, columns =["Text","Emotion"])
+    return df
 if __name__ == "__main__":
     main()
