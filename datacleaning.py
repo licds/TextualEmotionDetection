@@ -1,5 +1,6 @@
 import csv
 from lib2to3.pgen2.pgen import DFAState
+from tokenize import tokenize
 import nltk
 import string
 import pandas as pd
@@ -8,41 +9,68 @@ from collections import defaultdict
 from textblob import TextBlob
 #from textblob.np_extractors import ConllExtractor
 
+NEUTRAL = 0.4
+
 def main():
     df = initdf("Data/test.csv")
     dict = first_convert(df)
     pdict = bayes(df, dict)
-    print(pdict['cry'])
-    #print(pdict['suspicious'])
-    """
+
     state = True
     while state != False:
         sentence = input("Enter a sentence: ")
         if sentence == "f":
             state = False
             break
-        testimonial = TextBlob(sentence)
-        print(testimonial.sentiment)
-    """
+        emotion = classify(sentence, pdict)
+
+        #testimonial = TextBlob(sentence)
+        #print(testimonial.sentiment)
+
+def classify(text, dict):
+    sentence = tokenize(text)
+    emotion = [0, 0, 0, 0, 0, 0]
+    size = len(sentence)
+    if size == 0:
+        return
+    for word in sentence:
+        if word in dict.keys():
+            emotion[0] += dict[word][0]
+            emotion[1] += dict[word][1]
+            emotion[2] += dict[word][2]
+            emotion[3] += dict[word][3]
+            emotion[4] += dict[word][4]
+            emotion[5] += dict[word][5]
+    for i in range(len(emotion)):
+        emotion[i] = emotion[i]/size
+    return emotion
+
+def print_emotion(emotion):
+    emo_l = ["Sad", "Joy", "Love", "Anger", "Fear", "Surprise"]
+    for i in range(len(emotion)):
+        if emotion[i] >= NEUTRAL:
+            print(emo_l[i])
+            print("Sad: ", emotion[0], "Joy: ", emotion[1], "Love: ", emotion[2], "Anger: ", emotion[3], "Fear: ", emotion[4], "Surprise: ", emotion[5])
+            return
+    print("Neutral")
+    print("Sad: ", emotion[0], "Joy: ", emotion[1], "Love: ", emotion[2], "Anger: ", emotion[3], "Fear: ", emotion[4], "Surprise: ", emotion[5])
+    
+
+def test(df, dict):
+    accuracy = 0
+    for i in df['Text']:
+        print(i)
+    return accuracy
 
 def bayes(df, dict):
-    size = len(df)
+    #size = len(df)
     words = df.Text.str.len().sum()
-    emo_words = [0,0,0,0,0,0]
-    emo_words[0] = (df[df['Emotion']==0]).Text.str.len().sum()
-    emo_words[1] = (df[df['Emotion']==1]).Text.str.len().sum()
-    emo_words[2] = (df[df['Emotion']==2]).Text.str.len().sum()
-    emo_words[3] = (df[df['Emotion']==3]).Text.str.len().sum()
-    emo_words[4] = (df[df['Emotion']==4]).Text.str.len().sum()
-    emo_words[5] = (df[df['Emotion']==5]).Text.str.len().sum()
-    
-    emo_p = [0,0,0,0,0,0]
-    emo_p[0] = emo_words[0]/words
-    emo_p[1] = emo_words[1]/words
-    emo_p[2] = emo_words[2]/words
-    emo_p[3] = emo_words[3]/words
-    emo_p[4] = emo_words[4]/words
-    emo_p[5] = emo_words[5]/words
+    emo_words = []
+    emo_p = []
+
+    for i in range(6):
+        emo_words.append((df[df['Emotion']==i]).Text.str.len().sum())
+        emo_p.append(emo_words[i]/words)
     
     pdict = defaultdict(list)
     for word in dict.keys():
@@ -51,7 +79,6 @@ def bayes(df, dict):
         for i in range(6):
             emo_word=dict[word].count(i)
             pdict[word].append(emo_word/emo_words[0]*emo_p[0]/word_p)
-
     return pdict
 
 
