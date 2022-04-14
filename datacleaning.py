@@ -7,6 +7,7 @@ import pandas as pd
 from nltk.stem.wordnet import WordNetLemmatizer
 from collections import defaultdict
 from textblob import TextBlob
+from nltk.stem import PorterStemmer
 #from textblob.np_extractors import ConllExtractor
 
 NEUTRAL = 0.4
@@ -95,11 +96,12 @@ def initdf(csv_file):
 def tokenize(text):
     #blob = TextBlob(text, np_extractor=ConllExtractor()).noun_phrases
     #print(blob)
+    ps =PorterStemmer()
     tokens=nltk.word_tokenize(text)
     new=[]
     for word in tokens:
         word=word.lower()
-        word=WordNetLemmatizer().lemmatize(word)
+        word=ps.stem(word)
         if word not in nltk.corpus.stopwords.words("english"):
             new.append(word)
     return new
