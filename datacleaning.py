@@ -13,10 +13,13 @@ from nltk.stem import PorterStemmer
 NEUTRAL = 0.4
 
 def main():
-    df = initdf("Data/test.csv")
+    df = initdf("Data/training.csv")
+    df2 = initdf("Data/test.csv")
     dict = first_convert(df)
     pdict = bayes(df, dict)
+    print(test(df2, pdict))
 
+    """
     state = True
     while state != False:
         sentence = input("Enter a sentence: ")
@@ -27,9 +30,9 @@ def main():
 
         #testimonial = TextBlob(sentence)
         #print(testimonial.sentiment)
+    """
 
-def classify(text, dict):
-    sentence = tokenize(text)
+def classify(sentence, dict):
     emotion = [0, 0, 0, 0, 0, 0]
     size = len(sentence)
     if size == 0:
@@ -56,11 +59,16 @@ def print_emotion(emotion):
     print("Neutral")
     print("Sad: ", emotion[0], "Joy: ", emotion[1], "Love: ", emotion[2], "Anger: ", emotion[3], "Fear: ", emotion[4], "Surprise: ", emotion[5])
     
-
 def test(df, dict):
     accuracy = 0
-    for i in df['Text']:
-        print(i)
+    index = 0
+    for text in df['Text']:
+        emotion = classify(text, dict)
+        emo_index = emotion.index(max(emotion))
+        if emo_index == df.iloc[index, 1]:
+            accuracy += 1
+        index += 1
+    accuracy = accuracy/len(df)
     return accuracy
 
 def bayes(df, dict):
@@ -82,7 +90,6 @@ def bayes(df, dict):
             pdict[word].append(emo_word/emo_words[0]*emo_p[0]/word_p)
     return pdict
 
-
 def initdf(csv_file):
     f=open(csv_file)
     rows=list(csv.reader(f))
@@ -98,6 +105,7 @@ def tokenize(text):
     #print(blob)
     ps =PorterStemmer()
     tokens=nltk.word_tokenize(text)
+
     new=[]
     for word in tokens:
         word=word.lower()
@@ -109,40 +117,11 @@ def tokenize(text):
 def first_convert(df):
     dict1 = defaultdict(list)
     emotion = list(df.loc[:,"Emotion"])
-    for row in range(1,len(df.index)):
+    for row in range(0,len(df.index)):
         temp = df.iloc[row,0]
         for word in temp:
             dict1[word].append(emotion[row])
     return dict1
-
-"""
-def weight(dict):
-    weighted = defaultdict(list)
-    for key in dict.keys():
-        weighted[key] = sum(dict[key])/len(dict[key])
-    return weighted
-
-def frequency(dict):
-    freq = defaultdict(list)
-    for key in dict.keys():
-        freq[key] = nltk.FreqDist(dict[key]).max()
-    return freq
-
-def emotion_sentiment(emotion):
-    emotioncp = round(emotion)
-    if emotioncp == 0:
-        emotion_type = 'Sadness'
-    elif emotioncp == 1:
-        emotion_type = 'Joy'
-    elif emotioncp == 2:
-        emotion_type = 'Love'
-    elif emotioncp == 3:
-        emotion_type = 'Anger'
-    else:
-        emotion_type = 'Fear'
-    print("Emotion detected:", emotion_type, "     ", "The actual weight is: ", emotioncp)
-    return
-"""
 
 if __name__ == "__main__":
     main()
