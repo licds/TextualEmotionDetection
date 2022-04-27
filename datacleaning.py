@@ -11,17 +11,6 @@ from nltk.stem import PorterStemmer
 #from textblob.np_extractors import ConllExtractor
 import pickle
 
-#save a dictionary into a file
-def save_dict(dict, filename):
-    with open(filename+".pkl", "wb") as tf:
-        pickle.dump(dict,tf)
-
-#load a dictionary from a file
-def load_dict(filename):
-    with open(filename+".pkl", "rb") as tf:
-        new_dict = pickle.load(tf)
-    return new_dict
-
 def main():
     df = initdf("Data/training.csv")
     df.to_pickle("cleaned_train.pkl")  
@@ -30,6 +19,18 @@ def main():
     dict = first_convert(df)
     save_dict(dict, "dict")
 
+# Save a dictionary into pickle file
+def save_dict(dict, filename):
+    with open(filename+".pkl", "wb") as tf:
+        pickle.dump(dict,tf)
+
+# Load a dictionary from a pickle file
+def load_dict(filename):
+    with open(filename+".pkl", "rb") as tf:
+        new_dict = pickle.load(tf)
+    return new_dict
+
+# Basic csv file cleaning for train and test
 def initdf(csv_file):
     f=open(csv_file)
     rows=list(csv.reader(f))
@@ -40,10 +41,11 @@ def initdf(csv_file):
     df['Emotion'] = df['Emotion'].astype(int)
     return df
 
+# Implement for initdf
 def tokenize(text):
     #blob = TextBlob(text, np_extractor=ConllExtractor()).noun_phrases
     #print(blob)
-    ps =PorterStemmer()
+    ps = PorterStemmer()
     tokens=nltk.word_tokenize(text)
 
     new=[]
