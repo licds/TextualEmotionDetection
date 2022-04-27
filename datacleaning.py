@@ -9,6 +9,18 @@ from collections import defaultdict
 from textblob import TextBlob
 from nltk.stem import PorterStemmer
 #from textblob.np_extractors import ConllExtractor
+import pickle
+
+#save a dictionary into a file
+def save_dict(dict, filename):
+    with open(filename+".pkl", "wb") as tf:
+        pickle.dump(dict,tf)
+
+#load a dictionary from a file
+def load_dict(filename):
+    with open(filename+".pkl", "rb") as tf:
+        new_dict = pickle.load(tf)
+    return new_dict
 
 NEUTRAL = 0.4
 
