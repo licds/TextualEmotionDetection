@@ -29,26 +29,24 @@ def load_dict(filename):
 
 # Basic csv file cleaning for train and test
 def initdf(csv_file):
-    f=open(csv_file)
-    rows=list(csv.reader(f))
+    f = open(csv_file)
+    rows = list(csv.reader(f))
     rows.pop(0)
     for row in rows:
-        row[0]=list(tokenize(row[0]))
+        row[0] = list(tokenize(row[0]))
     df = pd.DataFrame(rows, columns=['Text', 'Emotion'])
     df['Emotion'] = df['Emotion'].astype(int)
     return df
 
 # Implement for initdf
 def tokenize(text):
-    #blob = TextBlob(text, np_extractor=ConllExtractor()).noun_phrases
-    #print(blob)
     ps = PorterStemmer()
-    tokens=nltk.word_tokenize(text)
+    tokens = nltk.word_tokenize(text)
 
-    new=[]
+    new = []
     for word in tokens:
-        word=word.lower()
-        word=ps.stem(word)
+        word = word.lower()
+        word = ps.stem(word)
         if word not in nltk.corpus.stopwords.words("english"):
             new.append(word)
     return new

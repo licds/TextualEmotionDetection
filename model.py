@@ -16,6 +16,12 @@ def main():
     print("Yi's df-idf:",test(df2, pdict, word_IDF))
     print("df-idf:",test(df2, pdict, tf))
     print("Original:", test(df2, pdict, 0))
+    
+    avg = 0
+    for i in range(16000):
+        avg += len(df['Text'][i])
+    print(avg/16000)
+
 
 # Save a dictionary into pickle file
 def save_dict(dict, filename):
