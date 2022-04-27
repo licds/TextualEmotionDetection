@@ -26,8 +26,8 @@ def load_dict(filename):
 NEUTRAL = 0.4
 
 def main():
-    df = pd.read_csv('cleaned_train.csv')
-    df2 = pd.read_csv('cleaned_test.csv')
+    df = pd.read_pickle('cleaned_train.pkl')
+    df2 = pd.read_pickle('cleaned_test.pkl')
     dict = load_dict("dict")
     pdict = bayes(df, dict)
     print(test(df2, pdict))
