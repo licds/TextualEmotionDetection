@@ -1,14 +1,18 @@
 import csv
 from lib2to3.pgen2.pgen import DFAState
+from os import stat
 from tokenize import tokenize
 import nltk
 import string
+from numpy import number
 import pandas as pd
 from nltk.stem.wordnet import WordNetLemmatizer
 from collections import defaultdict
 from textblob import TextBlob
 from nltk.stem import PorterStemmer
 import pickle
+import math
+from collections import Counter
 
 NEUTRAL = 0.4
 
@@ -17,7 +21,12 @@ def main():
     df2 = pd.read_pickle('cleaned_test.pkl')
     dict = load_dict("dict")
     pdict = bayes(df, dict)
-    print(test(df2, pdict))
+    word_IDF = pd.read_pickle('word_IDF.pkl')
+    tf = pd.read_pickle('tf.pkl')
+
+    print(test(df2, pdict, word_IDF))
+    print(test(df2, pdict, tf))
+    print(test(df2, pdict, 0))
 
 # Save a dictionary into pickle file
 def save_dict(dict, filename):
@@ -32,21 +41,21 @@ def load_dict(filename):
 
 # Take emotion sentiment from each word of a sentence and average 
 # it to represent the sentiment for the sentence
-def classify(sentence, dict):
+def classify(sentence, dict, weight):
+    sentence_len = len(sentence)
+    count = Counter(sentence)
     emotion = [0, 0, 0, 0, 0, 0]
-    size = len(sentence)
-    if size == 0:
+    if sentence_len == 0:
         return
     for word in sentence:
         if word in dict.keys():
-            emotion[0] += dict[word][0]
-            emotion[1] += dict[word][1]
-            emotion[2] += dict[word][2]
-            emotion[3] += dict[word][3]
-            emotion[4] += dict[word][4]
-            emotion[5] += dict[word][5]
-    for i in range(len(emotion)):
-        emotion[i] = emotion[i]/size
+            for i in range(6):
+                if weight == 0:
+                    emotion[i] += dict[word][i]
+                else:
+                    emotion[i] += dict[word][i]*(count[word]/sentence_len*weight[word][i])
+    #for i in range(len(emotion)):
+     #   emotion[i] = emotion[i]/size
     return emotion
 
 # Print sentence sentiment
@@ -57,15 +66,15 @@ def print_emotion(emotion):
             print(emo_l[i])
             print("Sad: ", emotion[0], "Joy: ", emotion[1], "Love: ", emotion[2], "Anger: ", emotion[3], "Fear: ", emotion[4], "Surprise: ", emotion[5])
             return
-    print("Neutral")
+    #print("Neutral")
     print("Sad: ", emotion[0], "Joy: ", emotion[1], "Love: ", emotion[2], "Anger: ", emotion[3], "Fear: ", emotion[4], "Surprise: ", emotion[5])
     
 # Build a test trial with accuracy
-def test(df, dict):
+def test(df, dict, weight):
     accuracy = 0
     index = 0
     for text in df['Text']:
-        emotion = classify(text, dict)
+        emotion = classify(text, dict, weight)
         emo_index = emotion.index(max(emotion)) # Take most probable emotion
         if emo_index == df.iloc[index, 1]:
             accuracy += 1
