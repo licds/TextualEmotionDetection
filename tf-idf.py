@@ -1,9 +1,7 @@
-import csv
 import pandas as pd
 from collections import defaultdict
 import pickle
 import math
-from collections import Counter
 
 def main():
     df = pd.read_pickle('cleaned_train.pkl')

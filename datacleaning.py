@@ -1,10 +1,7 @@
 import csv
-from lib2to3.pgen2.pgen import DFAState
 from tokenize import tokenize
 import nltk
-import string
 import pandas as pd
-from nltk.stem.wordnet import WordNetLemmatizer
 from collections import defaultdict
 from textblob import TextBlob
 from nltk.stem import PorterStemmer

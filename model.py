@@ -1,17 +1,6 @@
-import csv
-from lib2to3.pgen2.pgen import DFAState
-from os import stat
-from tokenize import tokenize
-import nltk
-import string
-from numpy import number
 import pandas as pd
-from nltk.stem.wordnet import WordNetLemmatizer
 from collections import defaultdict
-from textblob import TextBlob
-from nltk.stem import PorterStemmer
 import pickle
-import math
 from collections import Counter
 
 NEUTRAL = 0.4
@@ -24,9 +13,9 @@ def main():
     word_IDF = pd.read_pickle('word_IDF.pkl')
     tf = pd.read_pickle('tf.pkl')
 
-    print(test(df2, pdict, word_IDF))
-    print(test(df2, pdict, tf))
-    print(test(df2, pdict, 0))
+    print("Yi's df-idf:",test(df2, pdict, word_IDF))
+    print("df-idf:",test(df2, pdict, tf))
+    print("Original:", test(df2, pdict, 0))
 
 # Save a dictionary into pickle file
 def save_dict(dict, filename):
