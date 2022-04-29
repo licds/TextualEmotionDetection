@@ -11,7 +11,41 @@ from nltk.stem import PorterStemmer
 #from textblob.np_extractors import ConllExtractor
 import pickle
 
+<<<<<<< Updated upstream
 #save a dictionary into a file
+=======
+def main():
+    #df = initdf("Data/training.csv")
+    #df.to_pickle("cleaned_train.pkl")  
+    df = pd.read_pickle("cleaned_train.pkl")
+    
+    n = 0
+    for i in df['Text']:
+        n += len(i)
+    print(n)
+
+    dict = first_convert(df)
+    '''
+    high_freq = remove_high(df, dict)
+    df = update(df, high_freq)
+    n = 0
+    for i in df['Text']:
+        n += len(i)
+    print(n)
+    dict = update_dict(dict, high_freq)
+    '''
+    save_dict(dict, "dict")
+    #print(len(dict['im']))
+    df.to_pickle("cleaned_train1.pkl")  
+    #df2 = initdf("Data/test.csv")
+    #df2.to_pickle("cleaned_test.pkl")
+    #df3 = initdf("Data/validation.csv")
+    #df3.to_pickle("cleaned_validation.pkl")
+
+    
+
+# Save a dictionary into pickle file
+>>>>>>> Stashed changes
 def save_dict(dict, filename):
     with open(filename+".pkl", "wb") as tf:
         pickle.dump(dict,tf)
@@ -112,6 +146,24 @@ def initdf(csv_file):
     df['Emotion'] = df['Emotion'].astype(int)
     return df
 
+<<<<<<< Updated upstream
+=======
+def update(df, high_freq):
+    for sentence in df['Text']:
+        sentence = remove_word(sentence, high_freq)
+    return df 
+
+def update_dict(dict, high_freq):
+    dict1 = defaultdict(list)
+    for word in dict:
+        if word not in high_freq:
+            dict1[word] = dict[word]
+    return dict1
+
+
+
+# Implement for initdf
+>>>>>>> Stashed changes
 def tokenize(text):
     #blob = TextBlob(text, np_extractor=ConllExtractor()).noun_phrases
     #print(blob)
@@ -126,6 +178,12 @@ def tokenize(text):
             new.append(word)
     return new
 
+def remove_word(sentence, high_freq):
+    for word in sentence:
+        if word in high_freq:
+            sentence.remove(word)
+    return sentence
+
 def first_convert(df):
     dict1 = defaultdict(list)
     emotion = list(df.loc[:,"Emotion"])
@@ -134,6 +192,14 @@ def first_convert(df):
         for word in temp:
             dict1[word].append(emotion[row])
     return dict1
+
+def remove_high(df, dict):
+    size = len(df['Text'])
+    high_freq = []
+    for word in dict:
+        if len(dict[word])/size > 0.1:
+            high_freq.append(word)
+    return high_freq
 
 if __name__ == "__main__":
     main()
