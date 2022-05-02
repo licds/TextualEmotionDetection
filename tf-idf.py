@@ -1,7 +1,7 @@
 import pandas as pd
 from collections import defaultdict
 import pickle
-import math
+import numpy as np
 
 def main():
     df_train = pd.read_pickle('cleaned_train.pkl')
@@ -29,7 +29,7 @@ def tf_idf (df,dict):
         for emo in range(6):
             tf = dict[word].count(emo)/emo_words[emo]
             # 30 is optimal
-            tf_dict[word].append(tf*math.log(1+(2*avg_occurence_per_word/f_x)))
+            tf_dict[word].append(tf*np.log(1+(2*avg_occurence_per_word/f_x)))
             # how many times the word has appear in f_x
             # the denominator turns out to be a constant so the weight has an inverse relationship of its freq
             # the more a word appear, the less import it is.(eg.a noun water(that has no emotion value in a sentence would have less weight
