@@ -13,8 +13,12 @@ def main():
     df.to_pickle("cleaned_train.pkl")  
     df2 = initdf("Data/test.csv")
     df2.to_pickle("cleaned_test.pkl")
-    dict = first_convert(df)
-    save_dict(dict, "dict")
+    df3 = initdf("Data/validation.csv")
+    df3.to_pickle("cleaned_valid.pkl")
+    #dict = first_convert(df)
+    dict_valid = first_convert(df3)
+    #save_dict(dict, "dict")
+    save_dict(dict_valid, "dict_valid")
 
 # Save a dictionary into pickle file
 def save_dict(dict, filename):
@@ -59,6 +63,10 @@ def first_convert(df):
         for word in temp:
             dict1[word].append(emotion[row])
     return dict1
+
+
+def interactive_test():
+    sentence = input("Enter the sentence you want to classify!!!:")
 
 if __name__ == "__main__":
     main()

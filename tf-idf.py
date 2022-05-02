@@ -4,14 +4,16 @@ import pickle
 import math
 
 def main():
-    df = pd.read_pickle('cleaned_train.pkl')
-    dict = load_dict("dict")
-    word_IDF = wordIDF(df, dict)
-    save_dict(word_IDF, "word_IDF")
+    df = pd.read_pickle('cleaned_valid.pkl')
+    #dict = load_dict("dict")
+    dict = load_dict("dict_valid")
+    #word_IDF = wordIDF(df, dict)
+    #save_dict(word_IDF, "word_IDF")
     
-
+    #valid dataset
     tf = tf_idf(df, dict)
-    save_dict(tf, "tf")
+    #print(tf["lie"])
+    save_dict(tf, "tf3")
 
 # Save a dictionary into pickle file
 def save_dict(dict, filename):
@@ -35,22 +37,56 @@ def wordIDF(df, dict):
         for i in range(6):
             emo_freq=dict[word].count(i)
             word_freq_in_emo_dict[word].append(emo_freq)
-            word_IDF[word].append(math.log(emotion_count[i]/((word_freq_in_emo_dict[word])[i]+1)))
+            word_IDF[word].append(math.log(emotion_count[i]/((word_freq_in_emo_dict[word])[i])+1))
     return word_IDF
 
-def tf_idf(df, dict):
+#def tf_idf(df, dict):
+   # emo_words = []
+    #for i in range(6):
+        #emo_words.append((df[df['Emotion']==i]).Text.str.len().sum())
+    #tf_dict= defaultdict(list)
+    
+    #for x frequency in each emotion class
+    #for word in dict:
+       #f_x = len(dict[word])
+        #unique_set = set(dict[word])
+        #for emo in unique_set:
+               #tf = /len(df.loc[df['Text'].str.contains(word), emo])
+            # 10 is optimal
+            #print(sum(emo_words))
+            #tf_dict[word].append(tf*math.log(1+((df.shape[0])/f_x)))
+    #return tf_dict
+
+def tf_idf2(df,dict):
+    emo_sentence =[]
+    for i in range(6): 
+        emo_sentence.append(len(df[df['Emotion'] == i]))
+    print(emo_sentence)
+    tf_idf_dict = defaultdict(list)
+    for word in dict:
+        for i in range(6):
+            #tf = dict[word].count(i)/len(df['Text'].str.contains(word))   
+            #print(math.log(1+(30/len(dict[word]))))
+           #1) only taking the whole document as ts sum(emo_Sentence) 
+           tf_idf_dict[word].append(math.log(1+(sum(emo_sentence)/len(dict[word]))))
+            #tf_idf_dict[word].append(math.log(1+(emo_sentence[i]/len(dict[word]))))
+    return tf_idf_dict
+
+def tf_idf (df,dict):
     emo_words = []
     for i in range(6):
         emo_words.append((df[df['Emotion']==i]).Text.str.len().sum())
     tf_dict= defaultdict(list)
-    #for x frequency in each emotion class
     for word in dict:
         f_x = len(dict[word])
         for emo in range(6):
             tf = dict[word].count(emo)/emo_words[emo]
             # 10 is optimal
-            tf_dict[word].append(tf*math.log(1+(10/f_x)))
+            tf_dict[word].append(tf*math.log(1+(10.78/f_x)))
+            #how many times the word has appear in f_x
+            # the denominator turns out to be a constant so the weight has an inverse relationship of its freq
+            # the more a word appear, the less import it is.(eg.a noun water(that has no emotion value in a sentence would have less weight
+            # evaluate it ))
     return tf_dict
-
 if __name__ == "__main__":
     main()
