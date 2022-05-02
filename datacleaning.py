@@ -27,6 +27,7 @@ def main():
     #save_dict(dict_test, "dict_test")
     #save_dict(dict_valid, "dict_valid")
 
+    return 0
 
 #============================== DATASET MANIPULATION ==============================
 # Basic csv file cleaning for train and test
