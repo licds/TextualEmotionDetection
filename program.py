@@ -10,7 +10,7 @@ from program_setup import predict
 from model import classify
 
 
-NEUTRAL = 0.8
+NEUTRAL = 0.3
 
 #============================== DICTIONARY MANIPULATION ==============================
 # Load a dictionary from a pickle file
@@ -26,7 +26,7 @@ app = dash.Dash()
 
 app.layout = html.Div(children=[
                     html.H1('Emotion Detection Simple App'), 
-                    html.Div(children='''Enter the sentence you want to classify: '''), 
+                    html.H2(children='''Enter the sentence you want to classify: '''), 
                     dcc.Input(id='input', value='', type='text'), 
                     html.Div(id='output')
                     #html.Div(id='output-graph')
@@ -44,7 +44,7 @@ def update_value(input_data):
         sentence = list(tokenize(input_data))
         emotion = classify(sentence, pdict_prog, tf_prog)
         if len(sentence) == 0:
-            input_data = "emotion_types[6]"
+            input_data = "Neutral"
             return input_data
         for i in emotion:
             i = round((i-1)*10000, 4)

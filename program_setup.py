@@ -7,7 +7,9 @@ from tokenize import tokenize
 from collections import Counter
 from nltk.stem import PorterStemmer
 from collections import defaultdict
-NEUTRAL = 0.8
+
+NEUTRAL = 0.3
+
 def main():
     #========================== ONlY UNCOMMENT IF YOU WANT TO MODIFY DATASET ==========================
     #df = initdf("Data/program.csv")

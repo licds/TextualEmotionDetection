@@ -61,6 +61,8 @@ def classify(sentence, dict, weight):
                     emotion[i] += dict[word][i]
                 else:
                     emotion[i] += dict[word][i]*(count[word]/sentence_len*weight[word][i])
+    for emo in emotion:
+        emo = emo/sum(emotion)
     return emotion
     
 # Build a test trial with accuracy
