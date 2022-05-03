@@ -8,16 +8,9 @@ from tokenize import tokenize
 from datacleaning import tokenize
 from program_setup import predict
 from model import classify
-
+from datacleaning import load_dict
 
 NEUTRAL = 0.3
-
-#============================== DICTIONARY MANIPULATION ==============================
-# Load a dictionary from a pickle file
-def load_dict(filename):
-    with open(filename+".pkl", "rb") as tf:
-        new_dict = pickle.load(tf)
-    return new_dict
 
 tf_prog = pd.read_pickle('tf_prog.pkl')
 pdict_prog = load_dict("pdict_prog")
