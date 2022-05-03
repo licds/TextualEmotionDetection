@@ -1,7 +1,7 @@
 import pandas as pd
 from collections import defaultdict
-import pickle
 import numpy as np
+from datacleaning import save_dict, load_dict
 
 def main():
     df_train = pd.read_pickle('cleaned_train.pkl')
@@ -35,18 +35,6 @@ def tf_idf (df,dict):
             # the more a word appear, the less import it is.(eg.a noun water(that has no emotion value in a sentence would have less weight
             # evaluate it ))
     return tf_dict
-
-#============================== DICTIONARY MANIPULATION ==============================
-# Save a dictionary into pickle file
-def save_dict(dict, filename):
-    with open(filename+".pkl", "wb") as tf:
-        pickle.dump(dict,tf)
-
-# Load a dictionary from a pickle file
-def load_dict(filename):
-    with open(filename+".pkl", "rb") as tf:
-        new_dict = pickle.load(tf)
-    return new_dict
 
 if __name__ == "__main__":
     main()

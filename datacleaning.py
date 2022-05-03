@@ -3,7 +3,6 @@ from tokenize import tokenize
 import nltk
 import pandas as pd
 from collections import defaultdict
-from textblob import TextBlob
 from nltk.stem import PorterStemmer
 import pickle
 
@@ -75,10 +74,6 @@ def load_dict(filename):
     with open(filename+".pkl", "rb") as tf:
         new_dict = pickle.load(tf)
     return new_dict
-
-#============================== OTHERS ==============================
-def interactive_test():
-    sentence = input("Enter the sentence you want to classify!!!:")
 
 if __name__ == "__main__":
     main()

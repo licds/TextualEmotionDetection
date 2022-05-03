@@ -1,7 +1,7 @@
 import pandas as pd
 from collections import defaultdict
-import pickle
 from collections import Counter
+from datacleaning import load_dict
 
 NEUTRAL = 0.4
 
@@ -24,24 +24,6 @@ def main():
     print("Accuracy with validation - train:", test(df_train, pdict_valid, tf_valid))
     print("Accuracy with test - validation:", test(df_valid, pdict_test, tf_test))
     print("Accuracy with validation - test:", test(df_test, pdict_valid, tf_valid))
-    
-    #average frequency of a unique word
-    #print(get_unique_word(df3))
-    #print(get_words(df3))
-
-#============================== WORDS STATISTICS ==============================
-def get_unique_word(df):
-    unique_set = set()
-    for sent in df['Text']:
-        for word in sent:
-            unique_set.add(word)
-    return len(unique_set)
-        
-def get_words(df):
-    emo_words = []
-    for i in range(6):
-        emo_words.append((df[df['Emotion']==i]).Text.str.len().sum())
-    return sum(emo_words)
 
 #============================== TEST MODULE ==============================
 # Take emotion sentiment from each word of a sentence and average 
@@ -102,18 +84,6 @@ def print_emotion(emo_index, emotion):
     emo_l = ["Sad", "Joy", "Love", "Anger", "Fear", "Surprise"]
     print(emo_l[emo_index])
     print("Sad: ", emotion[0], "Joy: ", emotion[1], "Love: ", emotion[2], "Anger: ", emotion[3], "Fear: ", emotion[4], "Surprise: ", emotion[5])
-
-#============================== DICTIONARY MANIPULATION ==============================
-# Save a dictionary into pickle file
-def save_dict(dict, filename):
-    with open(filename+".pkl", "wb") as tf:
-        pickle.dump(dict,tf)
-
-# Load a dictionary from a pickle file
-def load_dict(filename):
-    with open(filename+".pkl", "rb") as tf:
-        new_dict = pickle.load(tf)
-    return new_dict
 
 if __name__ == "__main__":
     main()
