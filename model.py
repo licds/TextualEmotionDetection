@@ -96,13 +96,9 @@ def bayes(df,dict):
     return pdict
 
 # Print sentence sentiment
-def print_emotion(emotion):
+def print_emotion(emo_index, emotion):
     emo_l = ["Sad", "Joy", "Love", "Anger", "Fear", "Surprise"]
-    for i in range(len(emotion)):
-        if emotion[i] >= NEUTRAL:
-            print(emo_l[i])
-            print("Sad: ", emotion[0], "Joy: ", emotion[1], "Love: ", emotion[2], "Anger: ", emotion[3], "Fear: ", emotion[4], "Surprise: ", emotion[5])
-            return
+    print(emo_l[emo_index])
     print("Sad: ", emotion[0], "Joy: ", emotion[1], "Love: ", emotion[2], "Anger: ", emotion[3], "Fear: ", emotion[4], "Surprise: ", emotion[5])
 
 #============================== DICTIONARY MANIPULATION ==============================

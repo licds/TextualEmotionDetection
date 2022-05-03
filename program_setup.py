@@ -4,12 +4,9 @@ import pickle
 import numpy as np
 import pandas as pd
 from tokenize import tokenize
-from textblob import TextBlob
 from collections import Counter
 from nltk.stem import PorterStemmer
 from collections import defaultdict
-
-NEUTRAL = 0.4
 
 def main():
     #========================== ONlY UNCOMMENT IF YOU WANT TO MODIFY DATASET ==========================
@@ -112,16 +109,6 @@ def bayes(df,dict):
             emo_word=dict[word].count(i)
             pdict[word].append((emo_word/emo_words[i])*emo_p[i]/word_p)
     return pdict
-
-# Print sentence sentiment
-def print_emotion(emotion):
-    emo_l = ["Sad", "Joy", "Love", "Anger", "Fear", "Surprise"]
-    for i in range(len(emotion)):
-        if emotion[i] >= NEUTRAL:
-            print(emo_l[i])
-            print("Sad: ", emotion[0], "Joy: ", emotion[1], "Love: ", emotion[2], "Anger: ", emotion[3], "Fear: ", emotion[4], "Surprise: ", emotion[5])
-            return
-    print("Sad: ", emotion[0], "Joy: ", emotion[1], "Love: ", emotion[2], "Anger: ", emotion[3], "Fear: ", emotion[4], "Surprise: ", emotion[5])    
 
 #============================== TF-IDF WEIGHT CALCULATION ==============================
 def tf_idf (df,dict):
