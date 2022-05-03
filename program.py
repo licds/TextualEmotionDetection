@@ -2,7 +2,6 @@ import dash
 from dash.dependencies import Input, Output
 from dash import dcc
 from dash import html
-import pickle
 import pandas as pd
 from tokenize import tokenize
 from datacleaning import tokenize
