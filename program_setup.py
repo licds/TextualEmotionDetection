@@ -7,7 +7,7 @@ from tokenize import tokenize
 from collections import Counter
 from nltk.stem import PorterStemmer
 from collections import defaultdict
-
+NEUTRAL = 0.8
 def main():
     #========================== ONlY UNCOMMENT IF YOU WANT TO MODIFY DATASET ==========================
     #df = initdf("Data/program.csv")
@@ -111,7 +111,7 @@ def bayes(df,dict):
     return pdict
 
 #============================== TF-IDF WEIGHT CALCULATION ==============================
-def tf_idf (df,dict):
+def tf_idf(df,dict):
     emo_words = []
     for i in range(6):
         emo_words.append((df[df['Emotion']==i]).Text.str.len().sum())
@@ -175,6 +175,22 @@ def load_dict(filename):
     with open(filename+".pkl", "rb") as tf:
         new_dict = pickle.load(tf)
     return new_dict
+
+def predict(sentence, dict, weight):
+    emotion = classify(sentence, dict, weight)
+    if sentence == []:
+        return 6
+    if max(emotion) > NEUTRAL/10000+1:
+        emo_index = emotion.index(max(emotion)) 
+    else:
+        emo_index = 6
+    return emo_index
+
+def print_emotion(emo_index, emotion):
+    emo_l = ["Sad", "Joy", "Love", "Anger", "Fear", "Surprise", "Neutral"]
+    print("The emotion for this sentence is:", emo_l[emo_index])
+    print("Sad: ", round((emotion[0]-1)*10000, 4), "Joy: ", round((emotion[1]-1)*10000, 4), "Love: ", round((emotion[2]-1)*10000, 4), "Anger: ", round((emotion[3]-1)*10000, 4), "Fear: ", round((emotion[4]-1)*10000, 4), "Surprise: ", round((emotion[5]-1)*10000, 4))
+
 
 #============================== OTHERS ==============================
 def interactive_test():
