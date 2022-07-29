@@ -8,6 +8,7 @@ def main():
     df_test = pd.read_pickle('cleaned_test.pkl')
     df_valid = pd.read_pickle('cleaned_valid.pkl')
     dict_train = load_dict("dict_train")
+    print(len(dict_train))
     dict_test = load_dict("dict_test")
     dict_valid = load_dict("dict_valid")
     tf_train = tf_idf(df_train, dict_train)
